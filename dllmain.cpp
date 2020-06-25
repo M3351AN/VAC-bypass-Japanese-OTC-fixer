@@ -1,31 +1,31 @@
-﻿#include "framework.h"
+#include "framework.h"
 #include "pch.h"
 #include "headers/runtime/RuntimeHandler.h"
 
 /**
  *
- *   ---------------- o
- * | How it's works ? |
- * o ----------------
+ *   -------------------- o
+ * | どのように機能しますか？ |
+ * o --------------------
  *
  *                           |---------------|
- *                    +++++> |  Relocations  | ======+
- * |---------|        |      |---------------|       |        |-------------------------------------------|         |---------------|       |---------------------------|
- * | Segment | =======+                              -======> | Reconstruct hotpoints with new base addr  | ======> | OWN FUNCTIONS | ====> | Call Original entry point |
- * |---------|        |      |---------------|       |        |-------------------------------------------|         |---------------|       |---------------------------|
- *                    +++++> |    Imports    | ======+
+ *                    +++++> |      移転      | ======+
+ * |----------|       |      |---------------|       |        |-------------------------------------------|         |--------------|       |---------------------------|
+ * | セグメント | ======+                              -======> | 新しい基本アドレスでホットポイントを再構築します  | ======> |   自分の機能   | ====> | 元のエントリポイントを呼び出す |
+ * |----------|       |      |---------------|       |        |-------------------------------------------|         |--------------|       |---------------------------|
+ *                    +++++> |      輸入      | ======+
  *                           |---------------|
  *
  */
 
-//Scary but necessary.
+//怖いが必要。
 DWORD Segment::UnsafeAllocatedPointer = 0x0;
 DWORD Segment::UnsafeLibraryPointer = 0x0;
 SegmentFramework::oVirtualFunctionCaller SegmentFramework::OriginalVirtualCaller = 0x0;
 
 BOOL APIENTRY DllMain(HMODULE module, DWORD callReason, LPVOID lpReserved) {
 
-    //ALL DOCS INSIDE FUNCTIONS, AND HEADERS.
+    //すべてのドキュメントに関数とヘッダーが含まれています。
 
     if (callReason == DLL_PROCESS_ATTACH) {
 
@@ -37,20 +37,24 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD callReason, LPVOID lpReserved) {
 
 
 
+        
         logger.Space ();
-
-        logger.Info (u8"- - - - - - - - - - - - O N E T A P <->  ロ ー ダ  - - - - - - - - - - - -");
+        logger.Info (u8"すぐ隣で君が笑ってた");
+        logger.Info (u8"蝉時雨 ぬるい缶コーヒー");
+        logger.Info (u8"何回目かの夏は今年も何もなかったようにやってきた");
+        logger.Space ();
+        logger.Info (u8"- - - - - - - - - - - - ワ ン タ ッ プ   <->   ロ ー ダ  - - - - - - - - - - - -");
         logger.Space ();
         logger.Info (u8"[ランタイム]メモリセグメントから初期化...");
 
         logger.Space (2);
 
         logger.Info (u8"[ランタイム] セグメント操作が完了しました");
-        logger.Info (u8"[ランタイム] ホットスポットを再構築...");
+       
 
         runtime.ExtractSegment();
         
-        logger.Info ("| [~] Reconstructing hot-points...");
+        logger.Info (u8"[ランタイム] ホットスポットを再構築...");
 
         runtime.ReconstructHotPoints();
         
@@ -74,17 +78,17 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD callReason, LPVOID lpReserved) {
 
         logger.Info (u8"[フレームワーク] 全部終わった");
 
-        //TODO: Waiting your beatiful name.
-        //README: !!getenv it's a function!!. Please read docs before edit and ask questions.
-        segment.GetFramework().UpdateWatermark (getenv ("Takanashi_Yae"), "github.com/M3351AN/otc");
+        // TODO：あなたの美しい名前を待っています  
+        // README：!!“ getenv”関数です!! 編集する前にドキュメントを読んで質問してください（すでに削除しています--M3351AN）
+        segment.GetFramework().UpdateWatermark (“Takanashi_Yae”, "M3351AN.github.io");
         segment.GetFramework().UpdateMenuWatermark ("M3351AN ");
 
         logger.Info (u8"[ランタイム] OEPの処理...");
        
-        //Make segment alive.
+        //セグメントを有効にします
         runtime.InvokeOEP();
 
-        //Hide menu for better log look.
+        //ログの見栄えを良くするためにメニューを非表示にします
         segment.GetFramework().SetMenuStatus (false);
 
         logger.Info (u8"[ランタイム] OEP処理が完了しました");
@@ -114,7 +118,7 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD callReason, LPVOID lpReserved) {
         logger.Space();
         logger.Info(u8"GL&HF");
         logger.Space();
-        logger.Info (u8"- - - - - - - - - - - - O N E T A P <->  ロ ー ダ  - - - - - - - - - - - -");
+        logger.Info (u8"- - - - - - - - - - - - ワ ン タ ッ プ   <->   ロ ー ダ  - - - - - - - - - - - -");
 
         logger.Space (2);
 
